@@ -48,8 +48,8 @@ namespace DangerousPanel_Server
             Console.WriteLine();
 
             // Generate access token
-            Token = GenerateToken();
-            Log("Access Token: " + Token, ConsoleColor.Yellow);
+            //Token = GenerateToken();
+            //Log("Access Token: " + Token, ConsoleColor.Yellow);
 
             Log("Starting websocket server...");
             WebSocketServer wsServer = new WebSocketServer(7751);
