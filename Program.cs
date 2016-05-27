@@ -10,7 +10,7 @@ namespace DangerousPanel_Server
     {
         public static bool Debug = true;
 
-        static void Log(string text, ConsoleColor color = ConsoleColor.White, bool debug = false)
+        public static void Log(string text, ConsoleColor color = ConsoleColor.White, bool debug = false)
         {
             if (Debug || !debug)
             {
