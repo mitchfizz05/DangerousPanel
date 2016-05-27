@@ -10,6 +10,8 @@ namespace DangerousPanel_Server.PanelServer
 {
     public class PanelWebsocketService : WebSocketBehavior
     {
+        public bool Authenticated = false; // has the user been authenticated yet?
+
         dynamic wscript; // https://msdn.microsoft.com/en-us/library/8c6yea83(v=vs.84).aspx
 
         public PanelWebsocketService()
@@ -31,13 +33,38 @@ namespace DangerousPanel_Server.PanelServer
             wscript.SendKeys(key);
         }
 
+        /// <summary>
+        /// Handles authentication requests.
+        /// </summary>
+        /// <param name="data">Message received from client</param>
+        public void OnAuthRequest(string data)
+        {
+            if (data.Replace("-", "").ToLower() == Program.Token.Replace("-", "").ToLower())
+            {
+                Authenticated = true;
+                Send("authenticated");
+                Program.Log("Client authenticated: " + Context.UserEndPoint.Address, ConsoleColor.Green);
+            }
+            else
+            {
+                Authenticated = false;
+                Send("authfail");
+                Program.Log("Authentication failure (incorrect token)", ConsoleColor.Red);
+            }
+        }
+
         protected override void OnMessage(MessageEventArgs e)
         {
             Program.Log("Received message: " + e.Data, ConsoleColor.Gray, true);
 
             if (e.IsText)
             {
-                if (e.Data.StartsWith("key:"))
+                if (!Authenticated)
+                {
+                    // Not authenticated yet - receiving authcode.
+                    OnAuthRequest(e.Data);
+                }
+                else if (e.Data.StartsWith("key:"))
                 {
                     OnKeyRequest(e.Data);
                 }
@@ -48,7 +75,20 @@ namespace DangerousPanel_Server.PanelServer
 
         protected override void OnOpen()
         {
-            Program.Log("Connected with " + Context.UserEndPoint.Address, ConsoleColor.Green);
+            Program.Log("Connection from " + Context.UserEndPoint.Address, ConsoleColor.Green);
+
+            if (Program.Token != null)
+            {
+                // We have an access token, ask client to authenticate.
+                Send("authenticate");
+            }
+            else
+            {
+                // No access token - automatically authenticated
+                Authenticated = true;
+                Send("authenticated");
+                Program.Log("Automatically authenticated " + Context.UserEndPoint.Address + "!", ConsoleColor.Green);
+            }
 
             base.OnOpen();
         }
