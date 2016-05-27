@@ -57,8 +57,15 @@ body {
     color: black;
 }
 
-#connecting-overlay .connect-wrapper #connect-ip {
-    width: 225px;
+#connecting-overlay .connect-wrapper #connect-ip { width: 245px; }
+#connecting-overlay .connect-wrapper #connect-btn { width: 100px; }
+
+#connecting-overlay .connect-wrapper input {
+    border-radius: 0;
+    border: solid 1px #6E6E6E;
+    background-color: #E2E2E2;
+    height: 40px;
+    vertical-align: middle;
 }
 
 #connecting-overlay .header .title {
