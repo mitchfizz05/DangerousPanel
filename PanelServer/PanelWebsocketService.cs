@@ -12,16 +12,8 @@ namespace DangerousPanel_Server.PanelServer
     {
         public bool Authenticated = false; // has the user been authenticated yet?
 
-        dynamic wscript; // https://msdn.microsoft.com/en-us/library/8c6yea83(v=vs.84).aspx
-
         public PanelWebsocketService()
         {
-            //IgnoreExtensions = false;
-
-            Program.Log("Initialising WScript COM object...", debug: true);
-            Type wscriptType = Type.GetTypeFromProgID("WScript.Shell");
-            wscript = System.Activator.CreateInstance(wscriptType);
-            Program.Log("WScript COM objecet initalised!", debug: true);
         }
 
         /// <summary>
