@@ -33,6 +33,8 @@ namespace DangerousPanel_Server.PanelServer
 
         protected override void OnMessage(MessageEventArgs e)
         {
+            Program.Log("Received message: " + e.Data, ConsoleColor.Gray, true);
+
             if (e.IsText)
             {
                 if (e.Data.StartsWith("key:"))
