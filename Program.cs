@@ -15,6 +15,8 @@ namespace DangerousPanel_Server
 
         public static string Token = null;
 
+        public static Config config;
+
         public static void Log(string text, ConsoleColor color = ConsoleColor.White, bool debug = false)
         {
             if (Debug || !debug)
@@ -40,13 +42,33 @@ namespace DangerousPanel_Server
             }
         }
 
+        public static void LoadConfig()
+        {
+            // Configuration
+            string configPath = Environment.GetEnvironmentVariable("appdata") + "\\edpanel\\config.json";
+            Config.GenerateConfigFile(configPath, new Dictionary<string, object>()
+            {
+                {"debug", false },
+                {"useAccessTokens", true },
+                {"cmdrName", "Mitchfizz05" }
+            });
+            config = new Config(configPath);
+        }
+
         static void Main(string[] args)
         {
+            // Load config
+            LoadConfig();
+
+            Debug = (bool)config.ReadConfig("debug");
+
             Console.Title = "Dangerous Panel Server";
             Log("Dangerous Panel Server (by Mitchfizz05)", ConsoleColor.Cyan);
             Log("Debug mode active.", ConsoleColor.Green, true);
             Console.WriteLine();
 
+            Log("Welcome back " + config.ReadConfig("cmdrName"));
+            
             // Generate access token
             Token = GenerateToken();
             Log("Access Token: " + Token, ConsoleColor.Yellow);
