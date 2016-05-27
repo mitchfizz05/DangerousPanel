@@ -14,8 +14,10 @@ namespace DangerousPanel_Server.PanelServer
 
         public PanelWebsocketService()
         {
+            Program.Log("Initialising WScript COM object...", debug: true);
             Type wscriptType = Type.GetTypeFromProgID("WScript.Shell");
             wscript = System.Activator.CreateInstance(wscriptType);
+            Program.Log("WScript COM objecet initalised!", debug: true);
         }
 
         /// <summary>

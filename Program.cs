@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DangerousPanel_Server.PanelServer;
+using WebSocketSharp.Server;
 
 namespace DangerousPanel_Server
 {
@@ -26,6 +28,13 @@ namespace DangerousPanel_Server
             Console.Title = "Dangerous Panel Server";
             Log("Dangerous Panel Server (by Mitchfizz05)", ConsoleColor.Cyan);
             Log("Debug mode active.", ConsoleColor.Green, true);
+            Console.WriteLine();
+
+            Log("Starting websocket server...");
+            WebSocketServer wsServer = new WebSocketServer(7751);
+            wsServer.AddWebSocketService<PanelWebsocketService>("/panel");
+            wsServer.Start();
+            Log("Websocket server running!");
 
             Console.ReadKey();
         }
