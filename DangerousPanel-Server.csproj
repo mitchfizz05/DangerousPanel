@@ -47,9 +47,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KeySender.cs" />
     <Compile Include="PanelServer\PanelWebsocketService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScancodeConvert.cs" />
     <Compile Include="Webserver\SimpleHTTPServer.cs" />
   </ItemGroup>
   <ItemGroup>

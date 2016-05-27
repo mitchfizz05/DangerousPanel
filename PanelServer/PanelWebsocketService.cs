@@ -32,9 +32,10 @@ namespace DangerousPanel_Server.PanelServer
         {
             string key = data.Substring("key:".Length);
             Program.Log("Key request: " + key, debug: true);
+            
             try
             {
-                wscript.SendKeys(key);
+                KeySender.SendKey(ScancodeConvert.GetScancode(key));
             }
             catch
             {

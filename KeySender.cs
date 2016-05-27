@@ -37,25 +37,44 @@ namespace DangerousPanel_Server
 
         public static void SendKey(ushort key)
         {
-            Input[] inputs =
+            Input[] inputOn =
             {
-        new Input
-        {
-            type = (int) InputType.Keyboard,
-            u = new InputUnion
-            {
-                ki = new KeyboardInput
+                new Input
                 {
-                    wVk = 0,
-                    wScan = key,
-                    dwFlags = (uint) (KeyEventF.KeyDown | KeyEventF.Scancode),
-                    dwExtraInfo = GetMessageExtraInfo()
+                    type = (int) InputType.Keyboard,
+                    u = new InputUnion
+                    {
+                        ki = new KeyboardInput
+                        {
+                            wVk = 0,
+                            wScan = key,
+                            dwFlags = (uint) (KeyEventF.KeyDown | KeyEventF.Scancode),
+                            dwExtraInfo = GetMessageExtraInfo()
+                        }
+                    }
                 }
-            }
-        }
-    };
+            };
 
-            SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(Input)));
+            Input[] inputOff =
+            {
+                new Input
+                {
+                    type = (int) InputType.Keyboard,
+                    u = new InputUnion
+                    {
+                        ki = new KeyboardInput
+                        {
+                            wVk = 0,
+                            wScan = key,
+                            dwFlags = (uint) (KeyEventF.KeyUp | KeyEventF.Scancode),
+                            dwExtraInfo = GetMessageExtraInfo()
+                        }
+                    }
+                }
+            };
+
+            SendInput((uint)inputOn.Length, inputOn, Marshal.SizeOf(typeof(Input)));
+            SendInput((uint)inputOff.Length, inputOff, Marshal.SizeOf(typeof(Input)));
         }
 
         private struct Input
