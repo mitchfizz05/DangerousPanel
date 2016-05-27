@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.min.js"></script>
+    <script src="webpanel.js"></script>
 </head>
 <body>
     <div class="header-gradient"></div>
@@ -22,24 +23,24 @@
             <h2>Utilities</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="btn btn-lg toggle">Landing Gear</div>
+                    <div class="btn btn-lg toggle edbutton" data-key="{INSERT}">Landing Gear</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="btn btn-lg toggle">Hardpoints</div>
+                    <div class="btn btn-lg toggle edbutton" data-key="u">Hardpoints</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="btn btn-lg toggle">Cargo Scoop</div>
+                    <div class="btn btn-lg toggle edbutton" data-key="{HOME}">Cargo Scoop</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="btn btn-lg toggle">Lights</div>
+                    <div class="btn btn-lg toggle edbutton" data-key="l">Lights</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="btn btn-lg toggle">Silent Running</div>
+                    <div class="btn btn-lg toggle edbutton" data-key="k">Silent Running</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="btn btn-lg toggle">Flight Assist</div>
+                    <div class="btn btn-lg toggle edbutton" data-key="n">Flight Assist</div>
                 </div>
             </div>
         </div>
@@ -47,7 +48,7 @@
             <h2>Propulsion</h2>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="btn btn-lg toggle" id="btn-frameshift">Engage Frameshift</div>
+                    <div class="btn btn-lg toggle edbutton" id="btn-frameshift" data-key="j">Engage Frameshift</div>
                 </div>
             </div>
         </div>
