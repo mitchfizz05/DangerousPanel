@@ -11,10 +11,22 @@
     <script src="webpanel.js"></script>
 </head>
 <body>
+    <div id="connecting-overlay">
+        <div class="header">
+            <img src="edlogo.png" alt="Elite Dangerous" class="edlogo"><br>
+            <span class="title">Dangerous Panel</span>
+        </div>
+        <div class="connect-wrapper">
+            <input type="text" maxlength="64" autocomplete="off" autocorrect="off" autocapitalize="off" id="connect-ip" placeholder="IP Address">
+            <input type="button" value="Connect" id="connect-btn">
+        </div>
+        <object data="loading.svg" type="image/svg+xml" class="loader" style="display:none"></object>
+    </div>
+
     <div class="header-gradient"></div>
 
     <div class="container-fluid" id="container">
-        <div id="header">
+        <div class="header">
             <img src="edlogo.png" alt="Elite Dangerous" id="edlogo">
             <span id="cmdr-name">CMDR Mitchfizz05</span>
         </div>

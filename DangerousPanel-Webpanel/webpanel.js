@@ -20,7 +20,7 @@ function connect(ip, port, onTokenRequired, onDone) {
             var token = onTokenRequired(false);
             if (token == null) {
                 ws.close();
-                onDone(true);
+                onDone(false);
                 return;
             }
             ws.send(token);
@@ -28,12 +28,13 @@ function connect(ip, port, onTokenRequired, onDone) {
         } else if (event.data == "authenticated") {
             // Authenticated message
             authenticated = true;
+            onDone(true);
         } else if (event.data == "authfail") {
             // Authentication failed
             var token = onTokenRequired(true);
             if (token == null) {
                 ws.close();
-                onDone(true);
+                onDone(false);
                 return;
             }
             ws.send(token);
@@ -47,24 +48,42 @@ function sendKey(key) {
 }
 
 $(document).ready(function () {
-    // Connect
-    connect("192.168.0.8", 7751, function (failed) {
-        // Token required
-        if (failed) {
-            return prompt("Incorrect access token. Please try again.");
-        }
-        else {
-            return prompt("Please enter the access token displayed on the server console.");
-        }
-    }, function (success) {
-        // Finished connecting
-        if (success) {
-            authenticated = true;
-            console.log("Connected!");
-        } else {
-            console.warn("Connection failed!");
-            alert("Connection failed.");
-        }
+    $("#connect-btn").click(function () {
+        $("#connecting-overlay .connect-wrapper").hide();
+        $("#connecting-overlay .loader").show();
+
+        var ip = $("#connect-ip").val().split(":")[0];
+        var port = $("#connect-ip").val().split(":")[1] || 7751;
+
+        connect(ip, port, function (failed) {
+            // Token required
+            var message = "Please enter the access token displayed on the server console.";
+            if (failed) {
+                message = "Incorrect access token. Please try again.";
+            }
+
+            var result = prompt(message);
+
+            if ( (result == null) || (result == "") ) {
+                // Abort
+                return null;
+            } else {
+                return result;
+            }
+        }, function (success) {
+            // Finished connecting
+            if (success) {
+                authenticated = true;
+                console.log("Connected!");
+                $("#connecting-overlay").fadeOut(100);
+            } else {
+                console.warn("Connection failed!");
+                alert("Connection failed.");
+                $("#connecting-overlay").show();
+                $("#connecting-overlay .connect-wrapper").show();
+                $("#connecting-overlay .loader").hide();
+            }
+        })
     });
 
     $(".edbutton").click(function () {

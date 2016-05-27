@@ -19,7 +19,7 @@ body {
     margin-right: 10px;
 }
 
-#header {
+#container .header {
     margin-bottom: 15px;
 }
 
@@ -29,6 +29,43 @@ body {
     font-family: "Sarpanch", sans-serif;
     font-weight: bold;
     font-size: 48px;
+}
+
+#connecting-overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    z-index: 10;
+    padding: 50px;
+    text-align: center;
+
+    background-color: rgb(10, 10, 10);
+}
+
+#connecting-overlay .header .edlogo {
+    height: 300px;
+}
+
+#connecting-overlay .loader {
+    margin-top: 10px;
+    height: 100px;
+}
+
+#connecting-overlay .connect-wrapper {
+    margin-top: 10px;
+    color: black;
+}
+
+#connecting-overlay .connect-wrapper #connect-ip {
+    width: 225px;
+}
+
+#connecting-overlay .header .title {
+    color: white;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    font-family: "Muli", sans-serif;
+    font-size: 32px;
 }
 
 #container {
