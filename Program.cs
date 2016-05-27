@@ -60,7 +60,7 @@ namespace DangerousPanel_Server
             // Load config
             LoadConfig();
 
-            Debug = (bool)config.ReadConfig("debug");
+            Debug = (bool)config.ReadConfig("debug", false);
 
             Console.Title = "Dangerous Panel Server";
             Log("Dangerous Panel Server (by Mitchfizz05)", ConsoleColor.Cyan);
@@ -68,10 +68,19 @@ namespace DangerousPanel_Server
             Console.WriteLine();
 
             Log("Welcome back " + config.ReadConfig("cmdrName"));
-            
-            // Generate access token
-            Token = GenerateToken();
-            Log("Access Token: " + Token, ConsoleColor.Yellow);
+
+            if ((bool)config.ReadConfig("useAccessTokens"))
+            {
+                // Generate access token
+                Token = GenerateToken();
+                Log("Access Token: " + Token, ConsoleColor.Yellow);
+            }
+            else
+            {
+                // Access tokens disabled
+                Log("WARNING!! Access tokens are disabled! This means anyone who can connect to the server may be able to take control of your computer!\nChange in %appdata%\\edpanel\\config.json", ConsoleColor.Red);
+
+            }
 
             Log("Starting websocket server...");
             WebSocketServer wsServer = new WebSocketServer(7751);
