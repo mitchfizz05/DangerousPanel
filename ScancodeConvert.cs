@@ -134,5 +134,10 @@ namespace DangerousPanel_Server
             { "POWER", 0xDE },
             { "SLEEP", 0xDF }
         };
+
+        public static ushort GetScancode(string key)
+        {
+            return mapping[key.ToUpper()];
+        }
     }
 }
