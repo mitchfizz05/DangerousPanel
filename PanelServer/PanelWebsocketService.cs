@@ -16,6 +16,8 @@ namespace DangerousPanel_Server.PanelServer
 
         public PanelWebsocketService()
         {
+            //IgnoreExtensions = false;
+
             Program.Log("Initialising WScript COM object...", debug: true);
             Type wscriptType = Type.GetTypeFromProgID("WScript.Shell");
             wscript = System.Activator.CreateInstance(wscriptType);
@@ -30,7 +32,14 @@ namespace DangerousPanel_Server.PanelServer
         {
             string key = data.Substring("key:".Length);
             Program.Log("Key request: " + key, debug: true);
-            wscript.SendKeys(key);
+            try
+            {
+                wscript.SendKeys(key);
+            }
+            catch
+            {
+                Program.Log("Failed to send key: " + key, ConsoleColor.Red);
+            }
         }
 
         /// <summary>
