@@ -10,13 +10,17 @@ body {
     position: absolute;
     z-index: -1;
     width: 100vw;
-    height: 200px;
+    height: 400px;
     background: linear-gradient(black, rgba(0,0,0,0));
 }
 
 #edlogo {
     height: 160px;
     margin-right: 10px;
+}
+
+#header {
+    margin-bottom: 15px;
 }
 
 #cmdr-name {
@@ -31,3 +35,35 @@ body {
     padding-top: 10px;
 }
 
+#container .row {
+    margin: 20px 0;
+}
+
+#container .btn {
+    width: 100%;
+
+    border: 2px solid transparent;
+    background-color: rgba(255, 124, 4, 0.33);
+    color: #ff7c07;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+#container .active {
+    background-color: rgba(0,130,135,0.6) !important;
+    border: 2px solid #00ccff !important;
+    box-shadow: 0 0 9px #00ccff !important;
+    color:#00ccff !important
+}
+
+.category h2 {
+    color: #0483D6;
+    font-family: "Sarpanch", sans-serif;
+    font-size: 38px;
+    font-weight: bold;
+}
+
+#btn-frameshift {
+    padding: 32px 0;
+}
