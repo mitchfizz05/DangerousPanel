@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using Newtonsoft.Json;
 
 namespace DangerousPanel_Server.PanelServer
 {
@@ -14,6 +15,14 @@ namespace DangerousPanel_Server.PanelServer
 
         public PanelWebsocketService()
         {
+        }
+
+        /// <summary>
+        /// Structure for metadata sent to client so it can update it's UI.
+        /// </summary>
+        struct PanelMetadata
+        {
+            public string CmdrName;
         }
 
         /// <summary>
@@ -33,6 +42,22 @@ namespace DangerousPanel_Server.PanelServer
             {
                 Program.Log("Failed to send key: " + key, ConsoleColor.Red);
             }
+        }
+
+        /// <summary>
+        /// Handles request from the client to send out metadata.
+        /// </summary>
+        /// <param name="data"></param>
+        public void OnMetaRequest(string data)
+        {
+            PanelMetadata meta = new PanelMetadata()
+            {
+                CmdrName = (string)Program.config.ReadConfig("cmdrName", "Commander")
+            };
+
+            // Serialise and send the panel metadata
+            string rawJson = JsonConvert.SerializeObject(meta);
+            Send("meta:" + rawJson);
         }
 
         /// <summary>
@@ -69,6 +94,10 @@ namespace DangerousPanel_Server.PanelServer
                 else if (e.Data.StartsWith("key:"))
                 {
                     OnKeyRequest(e.Data);
+                }
+                else if (e.Data == "fetchmeta")
+                {
+                    OnMetaRequest(e.Data);
                 }
             }
 
