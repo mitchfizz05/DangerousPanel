@@ -45,6 +45,10 @@ function connect(ip, port, onTokenRequired, onDone) {
         console.warn("Websocket error!");
         onDone(false);
     });
+    ws.addEventListener("close", function (e) {
+        console.log("Connection closed");
+        onDone(false);
+    })
 }
 
 function sendKey(key) {
@@ -81,8 +85,6 @@ $(document).ready(function () {
                 console.log("Connected!");
                 $("#connecting-overlay").fadeOut(100);
             } else {
-                console.warn("Connection failed!");
-                alert("Connection failed.");
                 $("#connecting-overlay").show();
                 $("#connecting-overlay .connect-wrapper").show();
                 $("#connecting-overlay .loader").hide();
