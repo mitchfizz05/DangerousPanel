@@ -8,19 +8,21 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 
-/// <summary>
-/// Simple HTTP server class.
-/// All credit for this class goes to aksakalli - https://gist.github.com/aksakalli/9191056
-/// Small modifications have been made.
-/// </summary>
-class SimpleHTTPServer
+namespace DangerousPanel_Server.Webserver
 {
-    private readonly string[] _indexFiles = {
+    /// <summary>
+    /// Simple HTTP server class.
+    /// All credit for this class goes to aksakalli - https://gist.github.com/aksakalli/9191056
+    /// Small modifications have been made.
+    /// </summary>
+    public class SimpleHTTPServer
+    {
+        private readonly string[] _indexFiles = {
         "index.html",
         "index.htm"
     };
 
-    private static IDictionary<string, string> _mimeTypeMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
+        private static IDictionary<string, string> _mimeTypeMappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
         #region extension to MIME type list
         {".asf", "video/x-ms-asf"},
         {".asx", "video/x-ms-asf"},
@@ -88,132 +90,131 @@ class SimpleHTTPServer
         {".zip", "application/zip"},
         #endregion
     };
-    private Thread _serverThread;
-    private string _rootDirectory;
-    private HttpListener _listener;
-    private int _port;
+        private Thread _serverThread;
+        private string _rootDirectory;
+        private HttpListener _listener;
+        private int _port;
 
-    public int Port
-    {
-        get { return _port; }
-        private set { }
-    }
-
-    /// <summary>
-    /// Construct server with given port.
-    /// </summary>
-    /// <param name="path">Directory path to serve.</param>
-    /// <param name="port">Port of the server.</param>
-    public SimpleHTTPServer(string path, int port)
-    {
-        this.Initialize(path, port);
-    }
-
-    /// <summary>
-    /// Construct server with suitable port.
-    /// </summary>
-    /// <param name="path">Directory path to serve.</param>
-    public SimpleHTTPServer(string path)
-    {
-        //get an empty port
-        TcpListener l = new TcpListener(IPAddress.Loopback, 0);
-        l.Start();
-        int port = ((IPEndPoint)l.LocalEndpoint).Port;
-        l.Stop();
-        this.Initialize(path, port);
-    }
-
-    /// <summary>
-    /// Stop server and dispose all functions.
-    /// </summary>
-    public void Stop()
-    {
-        _serverThread.Abort();
-        _listener.Stop();
-    }
-
-    private void Listen()
-    {
-        _listener = new HttpListener();
-        _listener.Prefixes.Add("http://*:" + _port.ToString() + "/");
-        _listener.Start();
-        while (true)
+        public int Port
         {
-            try
-            {
-                HttpListenerContext context = _listener.GetContext();
-                Process(context);
-            }
-            catch (Exception ex)
-            {
-
-            }
+            get { return _port; }
+            private set { }
         }
-    }
 
-    private void Process(HttpListenerContext context)
-    {
-        string filename = context.Request.Url.AbsolutePath;
-        Console.WriteLine(filename);
-        filename = filename.Substring(1);
-
-        if (string.IsNullOrEmpty(filename))
+        /// <summary>
+        /// Construct server with given port.
+        /// </summary>
+        /// <param name="path">Directory path to serve.</param>
+        /// <param name="port">Port of the server.</param>
+        public SimpleHTTPServer(string path, int port)
         {
-            foreach (string indexFile in _indexFiles)
+            this.Initialize(path, port);
+        }
+
+        /// <summary>
+        /// Construct server with suitable port.
+        /// </summary>
+        /// <param name="path">Directory path to serve.</param>
+        public SimpleHTTPServer(string path)
+        {
+            //get an empty port
+            TcpListener l = new TcpListener(IPAddress.Loopback, 0);
+            l.Start();
+            int port = ((IPEndPoint)l.LocalEndpoint).Port;
+            l.Stop();
+            this.Initialize(path, port);
+        }
+
+        /// <summary>
+        /// Stop server and dispose all functions.
+        /// </summary>
+        public void Stop()
+        {
+            _serverThread.Abort();
+            _listener.Stop();
+        }
+
+        private void Listen()
+        {
+            _listener = new HttpListener();
+            _listener.Prefixes.Add("http://*:" + _port.ToString() + "/");
+            _listener.Start();
+            while (true)
             {
-                if (File.Exists(Path.Combine(_rootDirectory, indexFile)))
+                try
                 {
-                    filename = indexFile;
-                    break;
+                    HttpListenerContext context = _listener.GetContext();
+                    Process(context);
+                }
+                catch (Exception ex)
+                {
+
                 }
             }
         }
 
-        filename = Path.Combine(_rootDirectory, filename);
-
-        if (File.Exists(filename))
+        private void Process(HttpListenerContext context)
         {
-            try
+            string filename = context.Request.Url.AbsolutePath;
+            Console.WriteLine(filename);
+            filename = filename.Substring(1);
+
+            if (string.IsNullOrEmpty(filename))
             {
-                Stream input = new FileStream(filename, FileMode.Open);
-
-                //Adding permanent http response headers
-                string mime;
-                context.Response.ContentType = _mimeTypeMappings.TryGetValue(Path.GetExtension(filename), out mime) ? mime : "application/octet-stream";
-                context.Response.ContentLength64 = input.Length;
-                context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
-                context.Response.AddHeader("Last-Modified", System.IO.File.GetLastWriteTime(filename).ToString("r"));
-
-                byte[] buffer = new byte[1024 * 16];
-                int nbytes;
-                while ((nbytes = input.Read(buffer, 0, buffer.Length)) > 0)
-                    context.Response.OutputStream.Write(buffer, 0, nbytes);
-                input.Close();
-
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
-                context.Response.OutputStream.Flush();
-            }
-            catch (Exception ex)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                foreach (string indexFile in _indexFiles)
+                {
+                    if (File.Exists(Path.Combine(_rootDirectory, indexFile)))
+                    {
+                        filename = indexFile;
+                        break;
+                    }
+                }
             }
 
+            filename = Path.Combine(_rootDirectory, filename);
+
+            if (File.Exists(filename))
+            {
+                try
+                {
+                    Stream input = new FileStream(filename, FileMode.Open);
+
+                    //Adding permanent http response headers
+                    string mime;
+                    context.Response.ContentType = _mimeTypeMappings.TryGetValue(Path.GetExtension(filename), out mime) ? mime : "application/octet-stream";
+                    context.Response.ContentLength64 = input.Length;
+                    context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
+                    context.Response.AddHeader("Last-Modified", System.IO.File.GetLastWriteTime(filename).ToString("r"));
+
+                    byte[] buffer = new byte[1024 * 16];
+                    int nbytes;
+                    while ((nbytes = input.Read(buffer, 0, buffer.Length)) > 0)
+                        context.Response.OutputStream.Write(buffer, 0, nbytes);
+                    input.Close();
+
+                    context.Response.StatusCode = (int)HttpStatusCode.OK;
+                    context.Response.OutputStream.Flush();
+                }
+                catch (Exception ex)
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                }
+
+            }
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            }
+
+            context.Response.OutputStream.Close();
         }
-        else
+
+        private void Initialize(string path, int port)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            this._rootDirectory = path;
+            this._port = port;
+            _serverThread = new Thread(this.Listen);
+            _serverThread.Start();
         }
-
-        context.Response.OutputStream.Close();
     }
-
-    private void Initialize(string path, int port)
-    {
-        this._rootDirectory = path;
-        this._port = port;
-        _serverThread = new Thread(this.Listen);
-        _serverThread.Start();
-    }
-
-
 }
