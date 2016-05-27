@@ -8,7 +8,7 @@ namespace DangerousPanel_Server
 {
     class Program
     {
-        static bool Debug = true;
+        public static bool Debug = true;
 
         static void Log(string text, ConsoleColor color = ConsoleColor.White, bool debug = false)
         {
