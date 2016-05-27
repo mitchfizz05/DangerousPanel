@@ -92,18 +92,18 @@ $(document).ready(function () {
         })
     });
 
-    $(".edbutton").click(function () {
-        var key = $(this).attr("data-key");
-        sendKey(key);
-    })
+    $(".edbutton").each(function() {
+        $(this)[0].addEventListener("touchstart", function () {
+            var key = $(this).attr("data-key");
+            sendKey(key);
+        });
 
+        $(this)[0].addEventListener("touchstart", function () { $(this).addClass("active"); });
+        $(this)[0].addEventListener("touchend", function () { $(this).removeClass("active"); });
+    });
     $(".edbutton").mousedown(function () {
         $(this).addClass("active");
     }).mouseup(function () {
         $(this).removeClass("active");
-    });
-    $(".edbutton").each(function() {
-        $(this)[0].addEventListener("touchstart", function () { $(this).addClass("active"); });
-        $(this)[0].addEventListener("touchend", function () { $(this).removeClass("active"); });
     });
 });
