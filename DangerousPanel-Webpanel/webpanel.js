@@ -39,6 +39,10 @@ function connect(ip, port, onTokenRequired, onDone) {
             }
             ws.send(token);
             console.log("Sent token \"" + token + "\"!");
+        } else if (event.data.substring(0, "meta:".length) == "meta:") {
+            // Received metadata
+            var meta = JSON.parse(event.data.substring("meta:".length));
+            $("#cmdr-name").html("CMDR " + meta.CmdrName);
         }
     });
     ws.addEventListener("error", function (e) {
@@ -53,6 +57,12 @@ function connect(ip, port, onTokenRequired, onDone) {
 
 function sendKey(key) {
     ws.send("key:" + key);
+}
+
+function fetchPanelMetadata() {
+    // Send request for metadata
+    ws.send("fetchmeta"); // plz
+
 }
 
 $(document).ready(function () {
@@ -82,6 +92,7 @@ $(document).ready(function () {
             // Finished connecting
             if (success) {
                 authenticated = true;
+                fetchPanelMetadata(); // Fetch any metadata
                 console.log("Connected!");
                 $("#connecting-overlay").fadeOut(100);
             } else {
@@ -106,4 +117,11 @@ $(document).ready(function () {
     }).mouseup(function () {
         $(this).removeClass("active");
     });
+
+    // Every 10 seconds ask server for metadata
+    setInterval(function () {
+        if ((ws !== null) && (ws.readyState == ws.OPEN)) {
+            fetchPanelMetadata();
+        }
+    }, 10000);
 });
