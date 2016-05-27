@@ -8,7 +8,7 @@ var authenticated = false;
 function connect(ip, port, onTokenRequired, onDone) {
     console.log("Connecting to " + ip + ":" + port);
 
-    ws = new WebSocket("ws://" + ip + ":" + port + "/panel", "edpanel");
+    ws = new WebSocket("ws://" + ip + ":" + port + "/panel");
     ws.addEventListener("open", function () {
         console.log("Websocket connection to server open.");
     });
@@ -42,6 +42,10 @@ function connect(ip, port, onTokenRequired, onDone) {
     })
 }
 
+function sendKey(key) {
+    ws.send("key:" + key);
+}
+
 $(document).ready(function () {
     // Connect
     connect("192.168.0.8", 7751, function (failed) {
@@ -62,9 +66,9 @@ $(document).ready(function () {
             alert("Connection failed.");
         }
     });
-});
 
-$(".edbutton").click(function () {
-    var key = $(this).attr("data-key");
-
+    $(".edbutton").click(function () {
+        var key = $(this).attr("data-key");
+        sendKey(key);
+    });
 });
