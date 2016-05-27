@@ -45,5 +45,12 @@ namespace DangerousPanel_Server.PanelServer
 
             base.OnMessage(e);
         }
+
+        protected override void OnOpen()
+        {
+            Program.Log("Connected with " + Context.UserEndPoint.Address, ConsoleColor.Green);
+
+            base.OnOpen();
+        }
     }
 }
