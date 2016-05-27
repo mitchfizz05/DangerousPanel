@@ -4,6 +4,8 @@ html,body { margin: 0; padding: 0; }
 body {
     background: black url("wallpaper.png") no-repeat center center fixed;
     background-size: cover;
+
+    -webkit-text-size-adjust: 100%;
 }
 
 .header-gradient {
