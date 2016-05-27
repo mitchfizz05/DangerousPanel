@@ -94,6 +94,8 @@ body {
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 2px;
+
+    transition: border 0.2s, background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
 #container .active {
