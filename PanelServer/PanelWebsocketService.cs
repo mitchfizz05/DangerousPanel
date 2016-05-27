@@ -10,7 +10,7 @@ namespace DangerousPanel_Server.PanelServer
 {
     public class PanelWebsocketService : WebSocketBehavior
     {
-        dynamic wscript;
+        dynamic wscript; // https://msdn.microsoft.com/en-us/library/8c6yea83(v=vs.84).aspx
 
         public PanelWebsocketService()
         {
@@ -26,7 +26,7 @@ namespace DangerousPanel_Server.PanelServer
         /// <param name="data">Message received from client</param>
         public void OnKeyRequest(string data)
         {
-            string key = data.Substring("key:".Length, 1);
+            string key = data.Substring("key:".Length);
             Program.Log("Key request: " + key, debug: true);
             wscript.SendKeys(key);
         }
