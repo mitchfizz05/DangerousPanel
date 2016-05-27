@@ -8,18 +8,24 @@ namespace DangerousPanel_Server
 {
     class Program
     {
-        static void Log(string text, ConsoleColor color)
+        static bool Debug = true;
+
+        static void Log(string text, ConsoleColor color = ConsoleColor.White, bool debug = false)
         {
-            ConsoleColor oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = color;
-            Console.WriteLine(text);
-            Console.ForegroundColor = oldColor;
+            if (Debug || !debug)
+            {
+                ConsoleColor oldColor = Console.ForegroundColor;
+                Console.ForegroundColor = color;
+                Console.WriteLine(text);
+                Console.ForegroundColor = oldColor;
+            }
         }
 
         static void Main(string[] args)
         {
             Console.Title = "Dangerous Panel Server";
             Log("Dangerous Panel Server (by Mitchfizz05)", ConsoleColor.Cyan);
+            Log("Debug mode active.", ConsoleColor.Green, true);
 
             Console.ReadKey();
         }
