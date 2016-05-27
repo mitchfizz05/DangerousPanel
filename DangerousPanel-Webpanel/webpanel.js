@@ -40,7 +40,11 @@ function connect(ip, port, onTokenRequired, onDone) {
             ws.send(token);
             console.log("Sent token \"" + token + "\"!");
         }
-    })
+    });
+    ws.addEventListener("error", function (e) {
+        console.warn("Websocket error!");
+        onDone(false);
+    });
 }
 
 function sendKey(key) {
