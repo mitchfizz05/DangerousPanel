@@ -102,7 +102,7 @@ $(document).ready(function () {
                 $("#connecting-overlay .connect-wrapper").show();
                 $("#connecting-overlay .loader").hide();
             }
-        })
+        });
     });
 
     function btnPressHandler(btn) {
