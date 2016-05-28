@@ -50,7 +50,7 @@ namespace DangerousPanel_Server
             {
                 {"debug", false },
                 {"useAccessTokens", true },
-                {"cmdrName", "Mitchfizz05" }
+                {"cmdrName", "Steve" }
             });
             config = new Config(configPath);
         }
