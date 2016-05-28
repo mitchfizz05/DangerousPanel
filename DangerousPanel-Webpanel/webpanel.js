@@ -5,6 +5,8 @@ var ws;
 // Have we been authenticated yet?
 var authenticated = false;
 
+var touchscreen = false;
+
 function connect(ip, port, onTokenRequired, onDone) {
     console.log("Connecting to " + ip + ":" + port);
 
@@ -103,19 +105,31 @@ $(document).ready(function () {
         })
     });
 
-    $(".edbutton").each(function() {
-        $(this)[0].addEventListener("touchstart", function () {
-            var key = $(this).attr("data-key");
-            sendKey(key);
-        });
+    function btnPressHandler(btn) {
+        btn.addClass("active");
 
-        $(this)[0].addEventListener("touchstart", function () { $(this).addClass("active"); });
-        $(this)[0].addEventListener("touchend", function () { $(this).removeClass("active"); });
+        var key = btn.attr("data-key");
+        sendKey(key);
+    }
+
+    function btnReleaseHandler(btn) {
+        btn.removeClass("active");
+    }
+
+    $(".edbutton").each(function() {
+        $(this)[0].addEventListener("touchstart", function () { touchscreen = true; btnPressHandler($(this)); });
+        $(this)[0].addEventListener("touchend", function () { touchscreen = true; btnReleaseHandler($(this)); });
     });
     $(".edbutton").mousedown(function () {
-        $(this).addClass("active");
+        if (!touchscreen) { btnPressHandler($(this)); }
     }).mouseup(function () {
-        $(this).removeClass("active");
+        if (!touchscreen) { btnReleaseHandler($(this)); }
+    });
+
+    $("#connect-ip").keypress(function (e) {
+        if (e.keyCode == 13) {
+            $("#connect-btn").click();
+        }
     });
 
     // Every 10 seconds ask server for metadata
