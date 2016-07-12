@@ -1,0 +1,24 @@
+{
+  "name": "DangerousPanel-Webpanel",
+  "homepage": "https://github.com/mitchfizz05/DangerousPanel",
+  "authors": [
+    "Mitchfizz05 <me@mitchfizz05.net>"
+  ],
+  "description": "Dangerous Panel frontend.",
+  "main": "index.html",
+  "keywords": [
+    "elitedangerous"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jQuery": "2.2.4",
+    "bootstrap": "^3.3.6"
+  }
+}
