@@ -38,7 +38,7 @@ namespace DangerousPanel_Server
         {
             using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
             {
-                byte[] tokenBytes = new byte[5];
+                byte[] tokenBytes = new byte[4];
                 rng.GetBytes(tokenBytes);
                 return BitConverter.ToString(tokenBytes);
             }
