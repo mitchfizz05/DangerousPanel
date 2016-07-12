@@ -17,6 +17,8 @@ namespace DangerousPanel_Server
 
         public static Config config;
 
+        public static KeyBindingHelper keybindingHelper;
+
         public static void Log(string text, ConsoleColor color = ConsoleColor.White, bool debug = false)
         {
             if (Debug || !debug)
@@ -50,7 +52,8 @@ namespace DangerousPanel_Server
             {
                 {"debug", false },
                 {"useAccessTokens", true },
-                {"cmdrName", "Steve" }
+                {"cmdrName", "Steve" },
+                { "keybindsFile", "%appdata%\\edpanel\\keybinds.json" }
             });
             config = new Config(configPath);
         }
@@ -81,6 +84,10 @@ namespace DangerousPanel_Server
                 Log("WARNING!! Access tokens are disabled! This means anyone who can connect to the server may be able to take control of your computer!\nChange in %appdata%\\edpanel\\config.json", ConsoleColor.Red);
 
             }
+            
+            Log("Loading keybinds...");
+            keybindingHelper = new KeyBindingHelper(Environment.ExpandEnvironmentVariables((string)config.ReadConfig("keybindsFile")));
+            keybindingHelper.LoadKeybinds();
 
             Log("Starting websocket server...");
             WebSocketServer wsServer = new WebSocketServer(7751);
