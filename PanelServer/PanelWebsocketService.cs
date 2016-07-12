@@ -45,6 +45,34 @@ namespace DangerousPanel_Server.PanelServer
         }
 
         /// <summary>
+        /// Handles "action:" requests.
+        /// Similar to key requests except the actual keycode is loaded from a file based on the action name passed.
+        /// </summary>
+        /// <param name="data"></param>
+        public void OnActionRequest(string data)
+        {
+            string action = data.Substring("action:".Length);
+            Program.Log("Action request: " + action, debug: true);
+
+            string keycode = Program.keybindingHelper.GetKeybind(action);
+            if (keycode != null)
+            {
+                try
+                {
+                    KeySender.SendKey(ScancodeConvert.GetScancode(keycode));
+                }
+                catch
+                {
+                    Program.Log("Failed to send key: " + keycode, ConsoleColor.Red);
+                }
+            }
+            else
+            {
+                Program.Log("Attempt to trigger action that doesn't have an associated keybind! (" + action + ")", ConsoleColor.Red);
+            }
+        }
+
+        /// <summary>
         /// Handles request from the client to send out metadata.
         /// </summary>
         /// <param name="data"></param>
@@ -94,6 +122,10 @@ namespace DangerousPanel_Server.PanelServer
                 else if (e.Data.StartsWith("key:"))
                 {
                     OnKeyRequest(e.Data);
+                }
+                else if (e.Data.StartsWith("action:"))
+                {
+                    OnActionRequest(e.Data);
                 }
                 else if (e.Data == "fetchmeta")
                 {
