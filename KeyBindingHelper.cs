@@ -80,7 +80,7 @@ namespace DangerousPanel_Server
         /// <returns></returns>
         public string GetKeybind(string action, string defaultValue = null)
         {
-            if (keybindings[action] != null)
+            if (keybindings.ContainsKey(action))
                 return keybindings[action];
             else
                 return defaultValue;
