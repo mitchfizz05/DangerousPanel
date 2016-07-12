@@ -20,7 +20,8 @@ namespace DangerousPanel_Server
             { "Cargo_Scoop", "HOME" },
             { "Lights", "L" },
             { "Silent_Running", "K" },
-            { "Flight_Assist", "O" }
+            { "Flight_Assist", "O" },
+            { "Engage_Frameshift", "J" }
         };
 
         // User configured keybindings.
