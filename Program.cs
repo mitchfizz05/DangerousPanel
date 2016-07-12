@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using DangerousPanel_Server.PanelServer;
 using WebSocketSharp.Server;
+using System.Threading;
 
 namespace DangerousPanel_Server
 {
@@ -95,7 +96,7 @@ namespace DangerousPanel_Server
             wsServer.Start();
             Log("Websocket server running!");
 
-            Console.ReadKey();
+            Thread.Sleep(-1);
         }
     }
 }
