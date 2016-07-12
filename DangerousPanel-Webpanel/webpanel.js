@@ -61,6 +61,10 @@ function sendKey(key) {
     ws.send("key:" + key);
 }
 
+function sendAction(action) {
+    ws.send("action:" + action);
+}
+
 function fetchPanelMetadata() {
     // Send request for metadata
     ws.send("fetchmeta"); // plz
@@ -108,8 +112,17 @@ $(document).ready(function () {
     function btnPressHandler(btn) {
         btn.addClass("active");
 
+        var action = btn.attr("data-action");
         var key = btn.attr("data-key");
-        sendKey(key);
+
+        if (action !== undefined) {
+            sendAction(action);
+        } else if (key !== undefined) {
+            sendKey(key);
+        } else {
+            console.warn("Button doesn't have either data-action or data-key!");
+        }
+
     }
 
     function btnReleaseHandler(btn) {
